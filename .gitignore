@@ -1,0 +1,63 @@
+# =====================================================================
+# SECRETS & ENVIRONMENT VARIABLES (CRITICAL)
+# =====================================================================
+.env
+.env.*
+*.env
+secrets.json
+
+# =====================================================================
+# PYTHON & ENVIRONMENT
+# =====================================================================
+# Ignore the local virtual environment directory created by uv or venv
+.venv/
+venv/
+env/
+ENV/
+
+# Python bytecode/compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Distribution / packaging
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =====================================================================
+# TESTING & CACHES
+# =====================================================================
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.inline-snapshot/
+
+# =====================================================================
+# OPERATING SYSTEM SPECIFIC
+# =====================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode
