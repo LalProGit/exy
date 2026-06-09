@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     %% EXTERNAL INTERFACES
     subgraph Clients [External Interfaces]
@@ -55,3 +56,4 @@ graph TD
     
     %% ASYNC DB WRITES
     Orch -.->|Async Background Task| Notion
+    ```
