@@ -1,20 +1,18 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Perform any startup tasks here
-    print("Starting up the application...")
-    yield
-    # Perform any shutdown tasks here
-    print("Shutting down the application...")
+from __future__ import annotations
 
-app = FastAPI(
-    title="EXY bot",
-    lifespan=lifespan,
-    version="1.0.0"
-)
+from src.app import create_app
+from src.core.config import get_settings
+import uvicorn
+app = create_app()
 
-
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "healthy"}
+if __name__ == "__main__":
+    # 1. Fetch the cached settings
+    run_settings = get_settings()
+    
+    uvicorn.run(
+        "src.main:app", 
+        host=run_settings.host, 
+        port=run_settings.port, 
+        # Only enable auto-reload if we are strictly in development mode
+        reload=(run_settings.environment == "development") 
+    )
