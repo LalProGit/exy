@@ -1,0 +1,42 @@
+exy-os/
+├── pyproject.toml
+├── .env
+├── start.sh
+├── README.md
+│
+├── src/
+│   ├── main.py                 # App factory and Uvicorn entrypoint
+│   │
+│   ├── core/                   # Cross-cutting concerns (used by everyone)
+│   │   ├── config.py           # BaseSettings for env vars
+│   │   ├── logger.py           # Global logging config
+│   │   └── exceptions.py       # Global error handlers
+│   │
+│   ├── domains/                # FEATURE SLICES (The Core Shift)
+│   │   │
+│   │   ├── ingress/            # Domain: Taking messages in
+│   │   │   ├── router.py       # FastAPI endpoints (/v1/chat, /ws)
+│   │   │   ├── schemas.py      # ExyPayload definition
+│   │   │   └── security.py     # Discord ID verification middleware
+│   │   │
+│   │   ├── intent/             # Domain: Deciding what to do
+│   │   │   ├── service.py      # Logic to split '/' commands vs chat
+│   │   │   └── schemas.py      # Routing result schemas
+│   │   │
+│   │   ├── memory/             # Domain: Hot/Cold Storage
+│   │   │   ├── sqlite.py       # sqlite-vec connection and operations
+│   │   │   ├── notion.py       # Background sync logic
+│   │   │   └── schemas.py      # DB row schemas
+│   │   │
+│   │   ├── orchestration/      # Domain: The LLM Brain
+│   │   │   ├── agent.py        # pydantic-ai setup and OpenRouter calls
+│   │   │   ├── rag.py          # Ephemeral vector distillation
+│   │   │   └── schemas.py      # LLM token/response schemas
+│   │   │
+│   │   └── tools/              # Domain: Execution
+│   │       ├── web_scraper.py  # Playwright + Crawl4AI logic
+│   │       ├── rest_api.py     # Generic HTTP driver
+│   │       └── schemas.py      # Tool manifest schemas
+│   │
+│   └── shared/                 # Utilities used across multiple domains
+│       └── http_client.py      # A shared httpx.AsyncClient singleton
