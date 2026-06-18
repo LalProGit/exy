@@ -1,4 +1,3 @@
-
-rom fastapi import APIRouter
+from fastapi import APIRouter
 
 router  = APIRouter()
