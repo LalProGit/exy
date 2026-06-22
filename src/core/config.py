@@ -1,11 +1,12 @@
 from __future__ import annotations
-
+import logging
 import os
 from functools import lru_cache
 from pathlib import Path
+from pydantic import BaseModel, Field, ValidationError
+import json
 
-from pydantic import BaseModel, Field
-
+logger = logging.getLogger(__name__)
 
 class Settings(BaseModel):
     app_name: str = Field(default="EXY bot")
@@ -26,13 +27,13 @@ def get_settings() -> Settings:
     with open(config_path, "r") as file:
         config_data = json.load(file)
 
-    env_data = {
+    env_data = dict(
         app_name=os.getenv("APP_NAME", "EXY bot"),
         version=os.getenv("APP_VERSION", "1.0.0"),
         environment=os.getenv("ENVIRONMENT", "development"),
         host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", "8000")),
-    }
+    )
 
     merged_data = {**env_data, **config_data}
 
