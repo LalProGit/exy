@@ -15,6 +15,7 @@ class Settings(BaseModel):
     host: str = Field(default="0.0.0.0")
     port: int = Field(default=8000)
     owner_ids_discord: list[str] = Field(..., min_length=1)
+    openrouter_api_key: str = Filed(..., description="API key openrouter")
 
 
 @lru_cache(maxsize=1)
@@ -33,6 +34,7 @@ def get_settings() -> Settings:
         environment=os.getenv("ENVIRONMENT", "development"),
         host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", "8000")),
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY"," ")
     )
 
     merged_data = {**env_data, **config_data}

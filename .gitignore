@@ -5,6 +5,7 @@
 .env.*
 *.env
 secrets.json
+config.json
 
 # =====================================================================
 # PYTHON & ENVIRONMENT
