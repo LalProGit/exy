@@ -28,12 +28,14 @@ graph TD
         subgraph Tools [Execution Layer]
             REST[Generic REST Driver]
             Script[Python Script Runner]
-            Browser[Playwright Engine]
+            Brave[Brave Search Tool <br> Finder]
+            Browser[Playwright Engine <br> Reader]
         end
     end
 
     %% EXTERNAL APIS
     LLM[OpenRouter: Llama-3.3-70b]
+    BraveAPI[Brave Search API]
     Notion[(Notion: Cold Storage)]
 
     %% ROUTING LOGIC
@@ -48,7 +50,8 @@ graph TD
     Orch <-->|Prompt / Stream| LLM
     Orch -->|Trigger| Tools
     
-    %% EPHEMERAL RAG PIPELINE FLOW
+    %% WEB SEARCH & SCRAPING DATAFLOW
+    Brave <-->|Query & Get URLs| BraveAPI
     Browser -->|1. Extract & Strip Markdown| EphRAG
     EphRAG -->|2. Precision Chunk Retrieval| Orch
     
