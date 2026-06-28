@@ -7,11 +7,18 @@ from fastapi import FastAPI
 from src.core.config import get_settings
 from src.core.logging import configure_logging
 from src.api.router import router as api_router
+from src.domain.tools.bootstrap import initialize_registries
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
     app.state.settings = settings
+    # Initialize tool registries and attach to app.state
+    try:
+        await initialize_registries(app)
+    except Exception as e:
+        logging.getLogger(__name__).error(f"Failed to initialize tool registries: {e}")
+        raise
     yield
 
 

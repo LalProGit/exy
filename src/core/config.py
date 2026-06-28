@@ -15,7 +15,7 @@ class Settings(BaseModel):
     host: str = Field(default="0.0.0.0")
     port: int = Field(default=8000)
     owner_ids_discord: list[str] = Field(..., min_length=1)
-    openrouter_api_key: str = Filed(..., description="API key openrouter")
+    openrouter_api_key: str = Field(..., description="API key openrouter")
 
 
 @lru_cache(maxsize=1)

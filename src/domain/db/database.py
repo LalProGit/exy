@@ -8,18 +8,18 @@ logger = logging.getLogger(__name__)
 
 class DatabaseManager:
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = "tools.db"):
         self.db_path = db_path
     
     @contextmanager
     def get_connection(self):
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(self.db_path)
         try:
             conn.enable_load_extension(True)
             sqlite_vec.load(conn)
             conn.enable_load_extension(False)
 
-            yield
+            yield conn
 
         except Exception as e:
             logger.error(f"Database connection error {e}")
