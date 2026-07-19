@@ -40,3 +40,4 @@ exy-os/
 │   │
 │   └── shared/                 # Utilities used across multiple domains
 │       └── http_client.py      # A shared httpx.AsyncClient singleton
+
