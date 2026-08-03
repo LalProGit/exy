@@ -7,6 +7,7 @@ from fastapi import Request
 
 from src.domain.db.database import DatabaseManager
 from src.domain.tools.local.local_registry import LocalSQLiteRegistry
+from src.domain.tools.global_tool_registry import GlobalToolRegistry
 from src.domain.tools.embedding.embedding_providers import BgeSmall
 import src.domain.tools.local.my_tools  
 
@@ -21,10 +22,10 @@ async def initialize_registries(app) -> None:
     logger.info("Initialized embedding provider")
 
     local_registry = LocalSQLiteRegistry(db_manager=db, embedder=embedder)
-
     await local_registry.initialize()
-
-    app.state.tool_registry = local_registry
+    
+    global_registry = GlobalToolRegistry([local_registry])
+    app.state.tool_registry = global_registry
 
 
 def get_tool_registry(request: Request) -> Any:

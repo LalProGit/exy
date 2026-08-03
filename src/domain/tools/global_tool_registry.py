@@ -4,14 +4,14 @@ from src.domain.tools.models import ToolsRegistry, ToolManifest
 
 logger = logging.getLogger(__name__)
 
-class FederatedToolRegistry:
+class GlobalToolRegistry:
     def __init__(self, registries: list[ToolsRegistry]):
         self._registries = registries
 
-    async def get_relevant_tools(self, intent: str) -> list[ToolManifest]:
+    async def get_relevant_tools(self, intent: str, top_k: int = 3) -> list[ToolManifest]:
         # Query all registries in parallel, suppressing failures from offline servers
         results = await asyncio.gather(
-            *[registry.get_relevant_tools(intent) for registry in self._registries],
+            *[registry.get_relevant_tools(intent, top_k=top_k) for registry in self._registries],
             return_exceptions=True
         )
 

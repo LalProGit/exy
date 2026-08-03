@@ -11,7 +11,10 @@ class ToolManifest(BaseModel):
 
 
 class ToolsRegistry(Protocol):
-    async def get_relevant_tools(self, intent: str) -> list[ToolManifest]:
+    async def get_relevant_tools(self, intent: str, top_k: int = 3) -> list[ToolManifest]:
+        ...
+
+    async def initialize(self):
         ...
 
 
