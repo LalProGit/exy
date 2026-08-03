@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from src.core.config import get_settings
 from src.core.logging import configure_logging
 from src.api.router import router as api_router
-from src.domain.tools.bootstrap import initialize_registries
+from src.domain.tools.tool import initialize_registries
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
