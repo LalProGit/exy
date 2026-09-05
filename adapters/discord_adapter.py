@@ -13,7 +13,7 @@ from discord.ext import commands
 
 # Load your Discord Bot Token from the environment
 DISCORD_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
-EXY_OS_WS_URL = "ws://127.0.0.1:8000/api/ws"
+EXY_OS_WS_URL = os.getenv("EXY_OS_WS_URL", "ws://api:8000/api/ws")
 
 # Set up Discord intents (Needs Message Content Intent enabled in Discord Dev Portal)
 intents = discord.Intents.default()

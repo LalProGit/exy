@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.main
+    container_name: exy-api
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+    restart: unless-stopped
+
+  discord-adapter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.adapter
+    container_name: exy-discord-adapter
+    environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      EXY_OS_WS_URL: ws://api:8000/api/ws
+      PYTHONUNBUFFERED: "1"
+    depends_on:
+      - api
+    restart: unless-stopped
