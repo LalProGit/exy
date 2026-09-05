@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 from fastapi import Request
+from starlette.requests import HTTPConnection
 
 from src.domain.db.database import DatabaseManager
 from src.domain.tools.local.local_registry import LocalSQLiteRegistry
@@ -28,8 +29,10 @@ async def initialize_registries(app) -> None:
     app.state.tool_registry = global_registry
 
 
-def get_tool_registry(request: Request) -> Any:
-    return request.app.state.tool_registry
+
+
+def get_tool_registry(conn: HTTPConnection) -> GlobalToolRegistry:
+    return conn.app.state.tool_registry
 
 
 __all__ = ["initialize_registries", "get_tool_registry"]

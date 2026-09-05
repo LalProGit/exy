@@ -4,6 +4,7 @@ from pydantic import ValidationError
 
 from src.domain.ingress.schema import ExyPayload
 from src.domain.ingress.security import SecurityProvider, get_security_provider
+from src.domain.orchestrator.agent import ExyAgentCore, get_orchestrator
 
 
 router  = APIRouter(tags = ["Ingress Channels"])
@@ -12,7 +13,8 @@ logger = logging.getLogger(__name__)
 @router.websocket("/ws")
 async def websocket_ingress(
     websocket: WebSocket,
-    security: SecurityProvider = Depends(get_security_provider)
+    security: SecurityProvider = Depends(get_security_provider),
+    agent: ExyAgentCore = Depends(get_orchestrator),
 ):
     """Univarsal Websocket interface for Exy OS"""
     await websocket.accept()
@@ -31,11 +33,12 @@ async def websocket_ingress(
                     await websocket.close(code=4003)
                     break
             
-                logger.info(f"Authorized received from {payload.platform} : {payload.raw_text}")
+                logger.info(f"Authorized received from {payload.platform} : {payload.raw_text} Sending to Agent")
+                response = await agent.process_intent(payload)
 
                 await websocket.send_json({
                     "status": "success",
-                    "received": payload.raw_text,
+                    "received": response,
                     "message_id": payload.message_id
                 })
 
