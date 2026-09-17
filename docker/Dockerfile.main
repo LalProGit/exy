@@ -12,16 +12,20 @@ WORKDIR /app
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
+# Dependency layer — cached independently from source code changes
 COPY pyproject.toml uv.lock ./
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project
 
+# Source + config layer
 COPY src ./src
+COPY config.json ./config.json
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
+# ── Runtime ────────────────────────────────────────────────────────────────────
 FROM python:3.14-slim-bookworm AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -35,6 +39,7 @@ WORKDIR /app
 
 COPY --from=builder /opt/venv /opt/venv
 COPY --from=builder /app/src /app/src
+COPY --from=builder /app/config.json /app/config.json
 
 RUN apt-get update && \
     playwright install chromium --with-deps && \
@@ -44,11 +49,16 @@ RUN apt-get update && \
 
 COPY script/start.sh /app/start.sh
 
-RUN chown -R appuser:appgroup /app && \
+# Create data dir with correct ownership before switching user
+RUN mkdir -p /app/data && \
+    chown -R appuser:appgroup /app && \
     chmod +x /app/start.sh
 
 USER appuser
 
 EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
 
 CMD ["/app/start.sh"]
