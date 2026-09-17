@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-RUN uv pip install --system "discord.py==2.3.2" "websockets==16.0"
+RUN uv pip install --system "discord.py==2.3.2" "websockets==16.0" "audioop-lts"
 
 COPY adapters/discord_adapter.py /app/adapters/discord_adapter.py
 
